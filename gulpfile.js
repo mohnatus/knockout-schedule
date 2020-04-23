@@ -3,6 +3,7 @@ const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const less = require('gulp-less');
 const browserify = require('gulp-browserify');
+const terser = require('gulp-terser');
 browserSync = require('browser-sync').create();
 
 function bs() {
@@ -23,6 +24,7 @@ function jsBuild() {
 			.pipe(babel())
 			//.pipe(uglify())
 			.pipe(browserify({}))
+			.pipe(terser())
 			.pipe(dest('dist/'))
 	);
 }

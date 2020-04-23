@@ -71,23 +71,29 @@ export default class ScheduleModel {
 	 */
 	getRange() {
 		const startHour = this.startHour();
-		let endHour = this.endHour();
+		const endHour = this.endHour();
 
-		if (this.endMin() > 0) endHour += 1;
-		if (endHour > 23) endHour = endHour - 24;
-
+    let append = -1;
+		if (this.endMin() > 0) append = endHour + 1;
+    if (append >= 24) append = 0;
     let list;
 
-		if (this.startHour() < this.endHour() && startHour < endHour) {
-			list = this.hours.map((day) => {
-				return day.slice(startHour, endHour + 1);
+    if (startHour < endHour) {
+      list = this.hours.map((day) => {
+        const dayList = day.slice(startHour, endHour + 1);
+        if (append >= 0) {
+          dayList.push(day()[append])
+        };
+				return dayList;
 			});
-		} else {
+    } else {
 			list = this.hours.map((day) => {
-				return [
-					...day.slice(startHour),
-					...day.slice(0, endHour + 1),
-				];
+				const dayList = [
+          ...day.slice(startHour),
+          ...day.slice(0, endHour + 1)
+        ];
+        if (append >= 0) dayList.push(day()[append]);
+				return dayList;
 			});
 		}
     return list;
