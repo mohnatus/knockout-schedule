@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="dist/app.css">
+</head>
+
+<body>
+  <div>
+    <input type="text" data-validation="time"
+          data-bind="value:startTime,
+                      event: { change: updateStartTimeHandler }" >
+    <input type="text" data-validation="time"
+          data-bind="value:endTime,
+                      event: { change: updateEndTimeHandler }" >
+  </div>
+
+  <table>
+    <thead>
+      <tr data-bind="foreach: {data: list()[0], as: 'hour'}">
+        <th>
+
+          <div data-bind="visible: ($index() % 2 == 0)">
+            <span class="hour" data-bind="text: hour.index"></span>
+
+            <span data-bind="visible: $index() === 0, text: $root.timeFormat($root.startMin())"></span>
+            <span data-bind="visible: $index() !== 0, text: '00'"></span>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody data-bind="foreach: { data: list, as: 'day' }">
+      <tr data-bind="foreach: {data: day, as: 'hour'}">
+        <td data-bind="css: {active: hour.active},
+                      click: function() { $root.toggleHour($parentContext.$index(), hour.index) }">
+          <span data-bind="text: $parentContext.$index"></span>
+          /
+          <span data-bind="text: hour.index"></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script src="dist/app.js"></script>
+</body>
+
+</html>
