@@ -31,6 +31,8 @@
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-browserify": "^0.5.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-copy": "^4.0.1",
     "gulp-terser": "^1.2.0",
     "jest": "^25.4.0"
   },
