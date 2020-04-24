@@ -27,34 +27,38 @@ export default class ScheduleModel {
         };
       });
     });
-		this.list = KO.computed(() => this.getRange());
+    this.list = KO.computed(() => this.getRange());
 
-		this.offset = KO.computed(() => {
-			// количество ячеек в ряду
-			const cellsCount = this.list()[0].length;
-			// ширина ячейки в процентах
-			const cellWidth = 1 / cellsCount;
-			// сколько нужно скрыть от первой ячейки в процентах
-			const cellPercentStart = this.startMin() / 60;
-			// сколько нужно скрыть от таблицы в процентах
+    this.offset = KO.computed(() => {
+      // количество ячеек в ряду
+      const cellsCount = this.list()[0].length;
+      // ширина ячейки в процентах
+      const cellWidth = 1 / cellsCount;
+      // сколько нужно скрыть от первой ячейки в процентах
+      const cellPercentStart = this.startMin() / 60;
+      // сколько нужно скрыть от последней ячейки в процентах
+      const cellPercentEnd = this.endMin() ? 1 - this.endMin() / 60 : 0;
+      // сколько нужно скрыть от таблицы в процентах
       const tablePercentStart = cellPercentStart * cellWidth;
+      const tablePercentEnd = cellPercentEnd * cellWidth;
+      const tablePercent = tablePercentStart + tablePercentEnd;
       // видимая часть таблицы в процентах
-      const visiblePercent = 1 - tablePercentStart;
+      const visiblePercent = 1 - tablePercent;
       // полная ширина таблицы относительно ширины контейнера
-      const width = 1 / visiblePercent * 100 + '%';
-      console.log('cells', cellsCount, cellWidth)
-      console.log('cell percent', cellPercentStart)
-      console.log('table percent', tablePercentStart)
-      console.log('visible percent', visiblePercent)
+      const width = (1 / visiblePercent) * 100 + '%';
+      console.log('cells', cellsCount, cellWidth);
+      console.log('cell percent', cellPercentStart, cellPercentEnd);
+      console.log('table percent', tablePercent);
+      console.log('visible percent', visiblePercent);
 
       const transform = `translateX(-${tablePercentStart * 100}%)`;
 
-      console.log('width', width, 'transform', transform)
-			return {
+      console.log('width', width, 'transform', transform);
+      return {
         table: { width, transform },
-        time: { 'margin-left': cellPercentStart * 100 + '%' }
-			};
-		});
+        time: { 'margin-left': cellPercentStart * 100 + '%' },
+      };
+    });
   }
 
   get startTime() {
@@ -104,7 +108,7 @@ export default class ScheduleModel {
     const endHour = this.endHour();
 
     let append = -1;
-    if (this.endMin() > 0) append = endHour + 1;
+    if (this.endMin() > 0) append = endHour;
     if (append >= 24) append = 0;
     let list;
 
@@ -127,10 +131,10 @@ export default class ScheduleModel {
   }
 
   _eachHour(cb) {
-		const startHour = this.startHour();
-		const count = this.hours[0].length;
+    const startHour = this.startHour();
+    const count = this.hours[0].length;
 
-		let counter = 0;
+    let counter = 0;
 
     for (let i = startHour; i < count; i++) {
       this.hours.forEach((day, dayIndex) => {
@@ -159,5 +163,5 @@ export default class ScheduleModel {
 
   timeFormat(int) {
     return Time.formatPart(int);
-	}
+  }
 }
