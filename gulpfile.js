@@ -3,12 +3,13 @@ const babel = require('gulp-babel');
 const less = require('gulp-less');
 const browserify = require('gulp-browserify');
 const terser = require('gulp-terser');
+const gulpClean = require('gulp-clean');
 browserSync = require('browser-sync').create();
 
 function bs() {
     browserSync.init({
         server: {
-            baseDir: "./"
+            baseDir: "./dist/"
         }
     });
 };
@@ -18,8 +19,26 @@ function reload(cb) {
 	cb();
 }
 
-function clean(cb) {
-	cb();
+function html() {
+	return src('src/index.html')
+		.pipe(dest('dist/'))
+}
+
+function images() {
+	return src('src/img/*')
+		.pipe(dest('dist/img/'))
+}
+
+function clean() {
+	return src('dist/*')
+		.pipe(gulpClean({ read: false }));
+}
+
+function vendors() {
+	return (
+		src('src/vendors/*')
+			.pipe(dest('dist/vendors/'))
+	)
 }
 
 function jsBuild() {
@@ -36,13 +55,18 @@ function lessBuild() {
 	return src('src/app.less').pipe(less()).pipe(dest('dist/'));
 }
 
-exports.default = series(clean, parallel(jsBuild, lessBuild));
+exports.default = series(clean, parallel(html, vendors, images, jsBuild, lessBuild));
 
 exports.watch = () => {
 	bs();
+	html();
+	vendors();
+	images();
 	jsBuild();
 	lessBuild();
-	watch('index.html', reload);
-	watch('src/**/*.js', series(jsBuild, reload));
-	watch('src/**/*.less', series(lessBuild, reload));
+	watch('src/index.html', html);
+	watch('src/img/*', images);
+	watch('src/**/*.js', jsBuild);
+	watch('src/**/*.less', lessBuild);
+	watch('dist/*', reload)
 };
