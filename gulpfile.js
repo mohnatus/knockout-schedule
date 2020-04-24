@@ -13,6 +13,11 @@ function bs() {
     });
 };
 
+function reload(cb) {
+	browserSync.reload();
+	cb();
+}
+
 function clean(cb) {
 	cb();
 }
@@ -34,7 +39,10 @@ function lessBuild() {
 exports.default = series(clean, parallel(jsBuild, lessBuild));
 
 exports.watch = () => {
-  bs();
-	watch('src/**/*.js', jsBuild);
-	watch('src/**/*.less', lessBuild);
+	bs();
+	jsBuild();
+	lessBuild();
+	watch('index.html', reload);
+	watch('src/**/*.js', series(jsBuild, reload));
+	watch('src/**/*.less', series(lessBuild, reload));
 };

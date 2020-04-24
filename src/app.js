@@ -6,9 +6,9 @@ import * as Validator from './utils/validator';
  * Validates time inputs
  */
 
-[...document.querySelectorAll('[data-validation]')]
+[...document.querySelectorAll('[data-input]')]
   .forEach(el => {
-    if (el.dataset.validation === 'time') {
+    if (el.dataset.input === 'time') {
       Inputmask({
         mask: '99:99'
       }).mask(el);

@@ -1,89 +1,158 @@
 <!DOCTYPE html>
 <html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="dist/app.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="dist/app.css">
-</head>
+  <body>
+    <div style="display: none;" hidden>
+      <svg>
+        <symbol id="marked-icon" viewBox="0 0 15 10" fill="none">
+          <path
+            d="M5.26573 9.68389C4.8752 9.29336 4.8752 8.6602 5.26573 8.26967L13.0858 0.44951C13.4763 0.0589853 14.1095 0.058985 14.5 0.449509C14.8905 0.840034 14.8905 1.4732 14.5 1.86372L6.67994 9.68389C6.28942 10.0744 5.65625 10.0744 5.26573 9.68389Z"
+            fill="#12C971"
+          />
+          <path
+            d="M6.67994 9.68389C7.07047 9.29336 7.07041 8.6602 6.67988 8.26967L2.49995 4.08977C2.10943 3.69925 1.47626 3.69925 1.08574 4.08977C0.695216 4.4803 0.695216 5.11346 1.08574 5.50398L5.26573 9.68389C5.65625 10.0744 6.28942 10.0744 6.67994 9.68389Z"
+            fill="#12C971"
+          />
+        </symbol>
+        <symbol id="delete-icon" viewBox="0 0 12 12" fill="none">
+          <path
+            d="M1.2553 11.4588C0.864771 11.0683 0.864771 10.4351 1.2553 10.0446L10.2928 1.00566C10.6833 0.615137 11.3165 0.615138 11.707 1.00566C12.0975 1.39619 12.0975 2.02935 11.707 2.41988L2.66951 11.4588C2.27898 11.8493 1.64582 11.8493 1.2553 11.4588Z"
+            fill="#FF238D"
+          />
+          <path
+            d="M11.6132 11.3963C12.0038 11.0058 12.0038 10.3726 11.6132 9.9821L2.63679 1.00566C2.24627 0.615137 1.6131 0.615138 1.22258 1.00566C0.832056 1.39619 0.832056 2.02935 1.22258 2.41988L10.199 11.3963C10.5896 11.7868 11.2227 11.7868 11.6132 11.3963Z"
+            fill="#FF238D"
+          />
+        </symbol>
+      </svg>
+    </div>
 
-<body>
-  <div class="page">
-    <header class="page__header">
-      <div class="container">
-        <nav class="progress">
-        <ul></ul>
-      </nav>
-      </div>
-
-    </header>
-    <main class="page__main">
-      <div class="container">
-        <div class="page__content">
-        <h1>График работы предприятия</h1>
-
-        <div>
-          Задать интервал таблицы:
-          <input type="text" data-validation="time" data-bind="value:startTime,
-                      event: { change: updateStartTimeHandler }">
-          <input type="text" data-validation="time" data-bind="value:endTime,
-                      event: { change: updateEndTimeHandler }">
+    <div class="page">
+      <header class="page__header">
+        <div class="container">
+          <nav class="progress">
+            <ul></ul>
+          </nav>
         </div>
+      </header>
+      <main class="page__main">
+        <div class="container">
+          <div class="page__content">
+            <h1>График работы предприятия</h1>
 
-        <div class="schedule">
-          <div class="schedule__caption" data-bind="foreach: locale.days">
-            <div class="cell cell--middle" data-bind="text: $data"></div>
-          </div>
-          <div class="schedule__table">
-            <div class="schedule__time schedule__row" data-bind="foreach: {data: list()[0], as: 'hour'}">
-              <div class="cell" data-bind="if: $index() % 2"></div>
-              <div class="cell" data-bind="ifnot: $index() % 2">
-                <span class="hour" data-bind="text: hour.index"></span>
-                <!-- ko ifnot: $index -->
-                <sup data-bind="text: $root.timeFormat($root.startMin())"></sup>
-                <!-- /ko -->
-                <!-- ko if: $index -->
-                <sup>00</sup>
-                <!-- /ko -->
-              </div>
+            <div class="my-6">
+              <span class="mr-3">Задать интервал таблицы</span>
+              <span>
+                <input
+                  class="input input--time"
+                  type="text"
+                  data-input="time"
+                  data-bind="value:startTime,
+                      event: { change: updateStartTimeHandler }"
+                />
+              </span>
+              <span class="color-secondary mx-2">—</span>
+              <span>
+                <input
+                  class="input input--time"
+                  type="text"
+                  data-input="time"
+                  data-bind="value:endTime,
+                      event: { change: updateEndTimeHandler }"
+                />
+              </span>
             </div>
-            <div class="schedule__days" data-bind="foreach: { data: list, as: 'day' }">
-              <div class="schedule__day schedule__row" data-bind="foreach: {data: day, as: 'hour'}">
-                <div class="schedule__hour cell" data-bind="css: {active: hour.active},
-                      click: function() { $root.toggleHour($parentContext.$index(), hour.index) }">
+
+            <div class="schedule">
+              <div class="schedule__caption" data-bind="foreach: locale.days">
+                <div class="cell cell--middle" data-bind="text: $data"></div>
+              </div>
+              <div class="schedule__table">
+                <div
+                  class="schedule__time schedule__row"
+                  data-bind="foreach: {data: list()[0], as: 'hour'}"
+                >
+                  <div class="cell" data-bind="if: $index() % 2"></div>
+                  <div class="cell" data-bind="ifnot: $index() % 2">
+                    <span class="hour" data-bind="text: hour.index"></span>
+                    <!-- ko ifnot: $index -->
+                    <sup
+                      data-bind="text: $root.timeFormat($root.startMin())"
+                    ></sup>
+                    <!-- /ko -->
+                    <!-- ko if: $index -->
+                    <sup>00</sup>
+                    <!-- /ko -->
+                  </div>
+                </div>
+                <div
+                  class="schedule__days"
+                  data-bind="foreach: { data: list, as: 'day' }"
+                >
+                  <div
+                    class="schedule__day schedule__row"
+                    data-bind="foreach: {data: day, as: 'hour'}"
+                  >
+                    <div
+                      class="schedule__hour cell"
+                      data-bind="css: {active: hour.active},
+                      click: function() { $root.toggleHour($parentContext.$index(), hour.index) }"
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <div class="text-right mt-4">
+              <button
+                class="btn btn-sm"
+                type="button"
+                data-bind="click: fillSchedule"
+              >
+                <span class="ico">
+                  <svg width="15" height="10">
+                    <use xlink:href="#marked-icon" href="#marked-icon"></use>
+                  </svg>
+                </span>
+                Заполнить автоматически
+              </button>
+              <button
+                class="btn btn-sm"
+                type="button"
+                data-bind="click: resetSchedule"
+              >
+                <span class="ico">
+                  <svg width="12" height="12">
+                    <use xlink:href="#delete-icon" href="#delete-icon"></use>
+                  </svg>
+                </span>
+                Очистить
+              </button>
+            </div>
+          </div>
+
+          <div class="page__pagination text-center">
+            <a href="#" class="btn">Назад</a>
+            <a href="#" class="btn btn-primary">Далее</a>
           </div>
         </div>
+      </main>
+      <footer class="page__footer">
+        <div class="container"></div>
+      </footer>
+    </div>
 
-        <div>
-          <button class="btn btn-small" type="button" data-bind="click: fillSchedule">Заполнить автоматически</button>
-          <button class="btn btn-small" type="button" data-bind="click: resetSchedule">Очистить</button>
-        </div>
-
-      </div>
-
-      <div class="page__pagination">
-        <a href="#" class="btn">Назад</a>
-        <a href="#" class="btn">Далее</a>
-      </div>
-      </div>
-
-
-
-    </main>
-    <footer class="page__footer">
-      <div class="container"></div>
-    </footer>
-  </div>
-
-
-
-  <script src="node_modules/inputmask/dist/inputmask.min.js"></script>
-  <script src="dist/app.js"></script>
-</body>
-
+    <script src="node_modules/inputmask/dist/inputmask.min.js"></script>
+    <script src="dist/app.js"></script>
+  </body>
 </html>
