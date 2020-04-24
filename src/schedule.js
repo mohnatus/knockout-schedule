@@ -27,7 +27,34 @@ export default class ScheduleModel {
         };
       });
     });
-    this.list = KO.computed(() => this.getRange());
+		this.list = KO.computed(() => this.getRange());
+
+		this.offset = KO.computed(() => {
+			// количество ячеек в ряду
+			const cellsCount = this.list()[0].length;
+			// ширина ячейки в процентах
+			const cellWidth = 1 / cellsCount;
+			// сколько нужно скрыть от первой ячейки в процентах
+			const cellPercentStart = this.startMin() / 60;
+			// сколько нужно скрыть от таблицы в процентах
+      const tablePercentStart = cellPercentStart * cellWidth;
+      // видимая часть таблицы в процентах
+      const visiblePercent = 1 - tablePercentStart;
+      // полная ширина таблицы относительно ширины контейнера
+      const width = 1 / visiblePercent * 100 + '%';
+      console.log('cells', cellsCount, cellWidth)
+      console.log('cell percent', cellPercentStart)
+      console.log('table percent', tablePercentStart)
+      console.log('visible percent', visiblePercent)
+
+      const transform = `translateX(-${tablePercentStart * 100}%)`;
+
+      console.log('width', width, 'transform', transform)
+			return {
+        table: { width, transform },
+        time: { 'margin-left': cellPercentStart * 100 + '%' }
+			};
+		});
   }
 
   get startTime() {
@@ -83,16 +110,16 @@ export default class ScheduleModel {
 
     if (startHour < endHour) {
       list = this.hours.map((day) => {
-        const dayList = day.slice(startHour, endHour + 1);
+        const dayList = day.slice(startHour, endHour);
         if (append >= 0) {
-          dayList.push(day()[append]);
+          dayList.push(day[append]);
         }
         return dayList;
       });
     } else {
       list = this.hours.map((day) => {
-        const dayList = [...day.slice(startHour), ...day.slice(0, endHour + 1)];
-        if (append >= 0) dayList.push(day()[append]);
+        const dayList = [...day.slice(startHour), ...day.slice(0, endHour)];
+        if (append >= 0) dayList.push(day[append]);
         return dayList;
       });
     }
@@ -103,32 +130,34 @@ export default class ScheduleModel {
 		const startHour = this.startHour();
 		const count = this.hours[0].length;
 
-    for ( let i = startHour; i < count; i++) {
+		let counter = 0;
+
+    for (let i = startHour; i < count; i++) {
       this.hours.forEach((day, dayIndex) => {
-        cb(day[i], i, dayIndex);
+        cb(day[i], counter++, dayIndex);
       });
     }
-    const offset = count - startHour;
+
     for (let i = 0, finish = this.startHour(); i < finish; i++) {
       this.hours.forEach((day, dayIndex) => {
-        cb(day[i], i + offset, dayIndex);
+        cb(day[i], counter++, dayIndex);
       });
     }
   }
 
   fillSchedule() {
     this._eachHour((hour, index, dayIndex) => {
-      setTimeout(() => hour.active(true), index * 20 + dayIndex * 2);
+      setTimeout(() => hour.active(true), index * 2 + dayIndex * 50);
     });
   }
 
   resetSchedule() {
     this._eachHour((hour, index, dayIndex) => {
-      setTimeout(() => hour.active(false), index * 20 + dayIndex * 2);
+      setTimeout(() => hour.active(false), index * 2 + dayIndex * 50);
     });
   }
 
   timeFormat(int) {
     return Time.formatPart(int);
-  }
+	}
 }

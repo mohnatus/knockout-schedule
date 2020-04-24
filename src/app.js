@@ -18,7 +18,7 @@ import * as Validator from './utils/validator';
 
 KO.applyBindings(new ScheduleModel({
   start: '09:00',
-  end: '23:00',
+  end: '08:00',
   locale: {
     days: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
   }
