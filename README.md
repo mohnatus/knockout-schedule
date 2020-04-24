@@ -2,6 +2,8 @@
 
 Расписание работы предприятия
 
+[Демо](https://mohnatus.github.io/knockout-schedule/index.html)
+
 ## Инструменты
 
 Less, Knockout.js, Gulp
