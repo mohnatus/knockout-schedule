@@ -1,0 +1,64 @@
+.schedule {
+	display: flex;
+  font-size: @rem * 14px;
+
+	&__caption {
+		flex-grow: 0;
+    padding-right: 20px;
+    padding-top: @cellHeight;
+	}
+
+	&__table {
+		flex-grow: 1;
+	}
+
+	&__row {
+		display: flex;
+		margin-bottom: 1px;
+	}
+
+	.cell {
+		flex-grow: 1;
+		flex-shrink: 1;
+		height: @cellHeight;
+		margin-right: 1px;
+    display: flex;
+
+    &--middle {
+      align-items: center;
+    }
+	}
+
+	&__hour {
+		position: relative;
+		background-color: @defaultColor;
+		overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+      background-color: lighten(@primaryColor, 35%);
+    }
+
+		&:before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			border-radius: 50%;
+			background-color: @primaryColor;
+			width: 0px;
+			height: 0px;
+			opacity: 0;
+			pointer-events: none;
+			transform: translate(-50%, -50%);
+			will-change: width, height;
+			transition: width 250ms ease-in, height 250ms ease-in, opacity 300ms linear;
+		}
+
+		&.active:before {
+			opacity: 1;
+			width: 200%;
+			height: 200%;
+		}
+	}
+}

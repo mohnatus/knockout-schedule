@@ -1,0 +1,59 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  text-decoration: none;
+  box-shadow: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: @serviceColor;
+  background-color: transparent;
+  font: inherit;
+  color: inherit;
+
+  height: 38px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 50px;
+
+  font-weight: 500;
+  line-height: 1;
+
+  transition-duration: 250ms;
+  transition-timing-function: ease-in-out;
+  transition-property: background-color, color, border-color;
+
+  cursor: pointer;
+
+  .ico {
+    margin-right: 10px;
+  }
+
+  &:active {
+    box-shadow: @shadow;
+  }
+
+  &:hover {
+    background-color: darken(@serviceColor, 10%);
+    border-color: darken(@serviceColor, 10%);
+  }
+
+  &-primary {
+    background-color: @primaryColor;
+    border-color: @primaryColor;
+    color: @primaryColorContrast;
+
+    &:hover {
+      background-color: darken(@primaryColor, 20%);
+      border-color: darken(@primaryColor, 20%);
+    }
+  }
+
+  &-sm {
+    height: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: @rem * 12px;
+  }
+}
