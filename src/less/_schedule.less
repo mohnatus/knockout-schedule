@@ -22,15 +22,22 @@
 		flex-shrink: 1;
 		height: @cellHeight;
 		margin-right: 1px;
-    display: flex;
+		display: flex;
+		position: relative;
 
     &--middle {
       align-items: center;
-    }
+		}
+
+		.time {
+			position: absolute;
+			left: 0;
+			top: 0;
+			white-space: nowrap;
+		}
 	}
 
 	&__hour {
-		position: relative;
 		background-color: @defaultColor;
 		overflow: hidden;
     cursor: pointer;

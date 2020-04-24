@@ -7,6 +7,18 @@
 	margin-right: auto;
 }
 
+.flex {
+	display: flex;
+}
+
+.justify-between {
+	justify-content: space-between;
+}
+
+.align-center {
+	align-items: center;
+}
+
 .generate-margins(10);
 .generate-margins(@n, @i: 0) when (@i =< @n) {
 	.m-@{i}, .ma-@{i} {

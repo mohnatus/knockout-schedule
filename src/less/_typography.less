@@ -12,6 +12,10 @@ h1 {
 	font-weight: 500;
 }
 
+sup {
+  vertical-align: text-top;
+}
+
 .text {
   &-right {
     text-align: right;
@@ -30,5 +34,21 @@ h1 {
   }
   &-secondary {
     color: @textColorSecondary;
+  }
+}
+
+.ico {
+  fill: currentColor;
+  display: inline-block;
+  line-height: 1;
+  font-size: 0;
+}
+
+a {
+  color: @linkColor;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
   }
 }

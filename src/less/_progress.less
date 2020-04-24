@@ -1,0 +1,80 @@
+.progress {
+  &__list {
+    display: flex;
+    list-style: none;
+  }
+  &-item {
+    flex-grow: 1;
+    &:first-child {
+      flex-grow: 0;
+    }
+  }
+}
+
+.progress-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  padding-top: 40px;
+  color: @primaryColor;
+
+  &__label {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    transform: translateX(50%);
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  &__index {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    border: 2px solid @serviceColor;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: @serviceColor;
+    flex-grow: 1;
+
+  }
+
+  &.passed {
+    color: @textColor;
+    .progress-item {
+      &__index {
+        border-color: @primaryColor;
+      }
+    }
+    &:before {
+      height: 4px;
+      background: @primaryColor;
+    }
+  }
+
+  &.current {
+    color: @textColor;
+    .progress-item {
+      &__index {
+        border-color: @secondaryColor;
+      }
+    }
+    &:before {
+      height: 4px;
+      background: linear-gradient(to right, @primaryColor, @secondaryColor);
+    }
+  }
+}
