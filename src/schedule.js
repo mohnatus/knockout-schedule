@@ -7,7 +7,9 @@ export default class ScheduleModel {
 	 * @param {Object} config
 	 */
 	constructor(config) {
-		const { start, end } = config;
+		const { start, end, locale } = config;
+
+		this.locale = locale;
 
 		const [startHour, startMin] = Time.validate(start);
 		this.startHour = KO.observable(startHour);
@@ -18,9 +20,12 @@ export default class ScheduleModel {
 		this.endMin = KO.observable(endMin);
 
 		this.hours = [...Array(7)].map((day) => {
-			return KO.observableArray(
-				[...Array(24)].map((_, index) => ({ active: false, index }))
-			);
+			return [...Array(24)].map((_, index) => {
+				return {
+					index,
+					active: KO.observable(false)
+				}
+			});
 		});
 		this.list = KO.computed(() => this.getRange());
 	}
@@ -59,11 +64,10 @@ export default class ScheduleModel {
 	 * @param {number} hour hour index [0-23]
 	 */
 	toggleHour(day, hour) {
-		const current = this.hours[day]()[hour];
-		this.hours[day].splice(hour, 1, {
-			...current,
-			active: !current.active,
-		});
+		const current = this.hours[day][hour];
+
+		current.active(!current.active());
+
 	}
 
 	/**
@@ -97,6 +101,24 @@ export default class ScheduleModel {
 			});
 		}
     return list;
+	}
+
+	_eachHour(cb) {
+		this.hours.forEach((day, dayIndex) => {
+			day.forEach((hour, hourIndex) => cb(hour, hourIndex, dayIndex));
+		})
+	}
+
+	fillSchedule() {
+		this._eachHour((hour, index, dayIndex) => {
+			setTimeout(() => hour.active(true), index * 100 + dayIndex * 10)
+		})
+	}
+
+	resetSchedule() {
+		this._eachHour((hour, index, dayIndex) => {
+			setTimeout(() => hour.active(false), index * 100 + dayIndex * 10)
+		})
 	}
 
   timeFormat(int) {
